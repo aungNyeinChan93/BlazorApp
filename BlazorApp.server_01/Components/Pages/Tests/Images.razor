@@ -1,0 +1,33 @@
+﻿@page "/tests/images"
+
+
+<section class="container">
+    <h3>Images</h3>
+    <div class="row">
+        @foreach (var item in Numbers )
+        {
+            <div class="col-lg-3 col-md-8 col-sm-12 my-3">
+                <TestCardComponent ImageName="MyImageName"  Image="@item.ToString()" />
+            </div>
+        }
+    </div>
+
+    @foreach (var str in ClickImages)
+    {
+        <span>@str</span>
+    }
+</section>
+
+@code {
+
+    public List<int> Numbers { get; set; } = [1, 2, 3, 4, 5];
+
+    public List<string> ClickImages { get; set; } = [];
+
+    private void MyImageName(string name)
+    {
+
+        ClickImages = [.. ClickImages,  name];
+        Console.WriteLine(name);
+    }
+}

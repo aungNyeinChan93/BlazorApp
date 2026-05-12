@@ -1,0 +1,35 @@
+﻿
+
+
+<div @onmouseover="() => MouseEnterEventHandler()" class="@(Status ? "bg-success":"bg-primary")  card " style="width: 18rem;">
+    <img src="@($"/images/image_{Image}.png")" class="card-img-top" height="200" alt="..."> 
+    @* <img src="@Assets[$"images/image_{Image}.png"]" class="card-img-top h-40" alt="..."> *@
+    <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
+        <button @onclick="()=>ImageNameHandeler(Image!)"  class="btn btn-primary">Go somewhere</button>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public string? Image { get; set; }
+
+    public bool Status { get; set; } = false;
+
+    private void MouseEnterEventHandler()
+    {
+        Status = !Status;
+    }
+
+    [Parameter]
+    public EventCallback<string> ImageName { get; set; }
+
+
+    private async Task ImageNameHandeler(string name)
+    {
+       await ImageName.InvokeAsync(name);
+    }
+}
