@@ -1,0 +1,79 @@
+﻿@page "/createUser"
+@using Microsoft.AspNetCore.Components.Sections
+@using System.Text.Json
+
+<section>
+
+
+    <h3>CreateUser : @(FormValidMessage)</h3>
+
+    <EditForm Model="@User" FormName="createUser" OnSubmit="CreateSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name </label>
+            <InputText @bind-Value="User.Name" class="form-control" id="name"/>
+            <ValidationMessage For="()=>User.Name"/>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email </label>
+            <InputText @bind-Value="User.Email" class="form-control" id="email" />
+            <ValidationMessage For="()=>User.Email"/>
+        </div>
+        <div class="mb-3">
+            <label for="skill" class="form-label">Skill </label>
+            <InputSelect @bind-Value="User.Skill" class="form-control" id="skill">
+                <option>select</option>
+                @foreach (var skill in MySkills)
+                {
+                    <option value="@skill">@skill</option>
+                }
+            </InputSelect>
+                <ValidationMessage For="()=>User.Skill"/>
+        </div>
+        <div class="mb-3">
+            <label for="age" class="form-label">Age </label>
+            <InputNumber @bind-Value="User.Age" class="form-control" id="age" />
+            <ValidationMessage For="()=>User.Age"/>
+        </div>
+        <div class="mb-3">
+            <label for="active" class="form-label">IsActive </label> 
+            <br />
+            <InputCheckbox @bind-Value="User.IsActive" class="from-check" id="active" />
+        </div>
+        <div class="my-2">
+            <button type="submit" class="btn btn-primary">Create User </button>
+        </div>
+    </EditForm>
+
+
+</section>
+
+
+
+@code {
+
+    [SupplyParameterFromForm(FormName ="createUser")]
+    public User User { get; set; } = new User(){Email = "",Name = "",Age = 21 ,Skill = ""};
+
+    public string FormValidMessage { get; set; } = "";
+
+    private void CreateSubmit(EditContext editContext)
+    {
+        bool isValidate = editContext.Validate();
+        FormValidMessage = isValidate ? "Form Submited" : "Submit Fail";
+        Console.WriteLine(JsonSerializer.Serialize(User,new JsonSerializerOptions(){WriteIndented = true}));
+    }
+
+    public List<string> Skills { get; set; } = new List<string>();
+
+    public List<string> MySkills { get; set; } = new List<string>();
+
+        protected override void OnInitialized()
+    {
+        Skills.Add("Skill One");
+        Skills.Add("Skill Two");
+        Skills.Add("Skill Three");
+        MySkills = [.. Skills, "skill Four", "Skill Five"];
+    }
+}
