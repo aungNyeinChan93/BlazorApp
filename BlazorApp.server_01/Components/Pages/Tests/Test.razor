@@ -1,0 +1,11 @@
+﻿@page "/tests/test"
+
+<h3>Test</h3>
+
+ID @Id: <input type="text" @bind-value="Id" @bind-value:event="oninput" />
+
+<a class="btn btn-primary" href="@($"/tests/routing/{Id}")">Go To Route With Id</a>
+
+@code {
+    public int Id { get; set; }
+}

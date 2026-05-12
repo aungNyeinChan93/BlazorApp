@@ -1,0 +1,32 @@
+﻿@page "/tests/routing"
+@page "/tests/routing/{id:int}"
+@page "/tests/routing/{id:int}/{isSuccess:bool}"
+@* @page "/tests/routing/{isSuccess:bool}" *@
+@page "/tests/routing/{id:int}/{isSuccess:bool}/{value?}"
+
+
+
+<section>
+
+    <h3>Routing</h3>
+    <p>@Id</p>
+    <p>@(IsSuccess ? "success":"fail")</p>
+    <p>@Value</p>
+
+</section>
+
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
+    public bool IsSuccess { get; set; }
+
+    [Parameter]
+    public string Value { get; set; } 
+
+
+}

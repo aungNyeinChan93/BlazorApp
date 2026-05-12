@@ -1,0 +1,39 @@
+﻿@page "/tests/modelBinding"
+<PageTitle>Model Binding</PageTitle>
+
+
+<section>
+
+    @if (IsLoading)
+    {
+        <p>Loading ...</p>
+    }
+    else
+    {
+        <h3>ModelBinding</h3>
+        <br />
+        <p>@newUser.Name</p>
+        <p>@newUser.Email</p>
+        <br />
+
+        @* <InputText @bind-Value="newUser.Name"  /> *@
+
+        <input @bind-value="newUser.Name" type="text" @bind-value:event="oninput"/>
+
+        <button type="button" @onclick="()=>TestEvent.InvokeAsync(newUser.UserId)">Add UserId</button>
+    }
+
+</section>
+
+@code {
+
+    [Parameter]
+    public bool IsLoading { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<int> TestEvent { get; set; }
+
+
+    public User newUser = new User { UserId = 11, Email = "user@123", Name = "user" };
+
+}

@@ -1,0 +1,108 @@
+﻿@page "/weather"
+@inject NavigationManager NavigationManager;
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Weather</h1>
+
+<p>This component demonstrates showing data.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    @if (!string.IsNullOrEmpty(MouseEventStr))
+    {
+        @(MouseEventStr)
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th @onmouseover="()=> DateMouseHover = !DateMouseHover"
+                    class="@(DateMouseHover ? "text-danger" : "")">Date</th>
+                <th aria-label="Temperature in Celsius">Temp. (C)</th>
+                <th aria-label="Temperature in Fahrenheit">Temp. (F)</th>
+                <th @onmouseover="(e)=>TestMouseOver(e)">Summary</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                    <td>
+                        <button type="button" @onclick="(e) => ChangeTemp(forecast, true)" >Increase</button>
+                        <button type="button" @onclick="(e) => ChangeTemp(forecast, false)">Decrease</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="button" @onclick="GoToCount" >Go To Counter</button>
+}
+
+@code {
+    public bool DateMouseHover { get; set; } = false;
+
+    private WeatherForecast[]? forecasts;
+
+    public string MouseEventStr { get; set; } = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate a loading indicator
+        await Task.Delay(500);
+
+        var startDate = DateOnly.FromDateTime(DateTime.Now);
+        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        {
+            Date = startDate.AddDays(index),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = summaries[Random.Shared.Next(summaries.Length)]
+        }).ToArray();
+    }
+
+    private class WeatherForecast
+    {
+        public DateOnly Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string? Summary { get; set; }
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+
+    }
+
+
+    private void ChangeTemp(WeatherForecast forecast,bool increase)
+    {
+        if (increase)
+        {
+            forecast.TemperatureC++;
+        }
+        else
+        {
+            forecast.TemperatureC --;
+        }
+    }
+
+    private void TestMouseOver(MouseEventArgs e)
+    {
+        MouseEventStr = e.Type.ToString();
+        Console.WriteLine("hihi");
+    }
+
+    private void GoToCount()
+    {
+        NavigationManager.NavigateTo("/counter");
+    }
+
+}

@@ -1,0 +1,22 @@
+﻿@page "/"
+@using BlazorApp.server_01.Components.Pages.Tests
+
+<PageTitle>Home</PageTitle>
+
+
+<h1>Hello, world! @(TestUserId)</h1>
+
+Welcome to your new app.
+
+<ModelBinding IsLoading="false" TestEvent="TestClick"/>
+
+
+@code{
+
+    public int TestUserId { get; set; }
+
+    private void TestClick(int id)
+    {
+        TestUserId = id;
+    }
+}
